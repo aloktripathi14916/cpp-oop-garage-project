@@ -1,0 +1,513 @@
+#include<iostream>
+#include <vector>
+#include <limits>
+#include <string>
+using namespace std;
+
+class vehicle
+{
+public:
+ string name;
+    int wheels;
+    int seats;
+    float maxSpeed;
+    float weight;
+    string fuelType;
+    
+virtual void show() = 0;
+    virtual void move() = 0;
+    virtual void fuelInfo() = 0;
+    virtual void wheelInfo() = 0;
+    vehicle(string n,int w,int s,float ms,float wt,string t)
+    {
+          name=n;
+          wheels=w;
+          seats=s;
+          maxSpeed=ms;
+          weight=wt;
+          fuelType=t;
+    }
+ virtual ~vehicle() {}
+};
+
+class airplane:public vehicle
+{
+    public:
+    float peakHeight;
+    int aviation;
+     
+    airplane(string n, int w, int s, float ms, float wt, string f)
+        : vehicle(n, w, s, ms, wt, f) {}
+
+    void airplaneset(int a, float p) {
+        aviation = a;
+        peakHeight = p;
+    }
+
+    void show() override
+    {
+        cout << "Airplane: " << name << endl;
+        cout << "Seats: " << seats << ", Max Speed: " << maxSpeed << " km/h, Weight: " << weight << " tons" << endl;
+        cout << "Peak Height: " << peakHeight << " meters, Aviation Capacity: " << aviation << endl;
+    }
+    void move() override { cout << name << " is taking off and flying in the sky!" << endl; }
+    void fuelInfo() override { cout << name << " runs on " << fuelType << " fuel." << endl; }
+    void wheelInfo() override { cout << name << " has " << wheels << " wheels for takeoff and landing." << endl; }
+};
+class jet:public airplane
+{
+  public:
+    int range;
+    bool isSupersonic= true;
+    string weapon;
+    bool stealthMode;
+
+    jet(string n,int w,int s,float ms,float wt,string t)
+    : airplane(n,w,s,ms,wt,t){}
+
+     void jetset(int r,bool s,string w,bool st)
+    {
+        range = r;
+        isSupersonic=s;
+        weapon = w;
+        stealthMode = st;
+    }
+    void show() override
+    {
+        cout << "Jet: " << name << endl;
+        cout << "Seats: " << seats << ", Max Speed: " << maxSpeed << " km/h, Weight: " << weight << " tons" << endl;
+        cout << "Range: " << range << " km, Weapon: " << weapon << ", Stealth Mode: " << (stealthMode ? "ON" : "OFF") << endl;
+    }
+
+    void move() override
+    {
+        if(isSupersonic) cout << name << " is flying at supersonic speed!" << endl;
+        else cout << name << " is cruising normally." << endl;
+        if(stealthMode) cout << name << " is in stealth mode..." << endl;
+    }
+
+    void fuelInfo() override { cout << name << " runs on " << fuelType << " fuel." << endl; }
+    void wheelInfo() override { cout << name << " has " << wheels << " wheels for landing." << endl; }
+
+    bool operator>(jet &other) { return this->range > other.range; }
+
+};
+class car:virtual public vehicle
+{
+   
+public:
+    string model;
+    float speed;
+    string color;
+    float acceleration;
+    void setcar(string m,float s,string c)
+    {
+        model=m;
+        speed=s;
+        color=c;
+    }
+    car(string n,int w,int s,float ms,float wt,string t)
+: vehicle(n,w,s,ms,wt,t) {}
+
+    void show() override
+    {
+        cout << "Car: " << name << endl;
+        cout << "Model: " << model << ", Color: " << color << ", Seats: " << seats << endl;
+        cout << "Max Speed: " << maxSpeed << " km/h, Acceleration: " << acceleration << " m/s², Weight: " << weight << " tons" << endl;
+    }
+    void move() override { cout << name << " is driving on the road at " << speed << " km/h!" << endl; }
+    void fuelInfo() override { cout << name << " uses " << fuelType << " fuel." << endl; }
+    void wheelInfo() override { cout << name << " has " << wheels << " wheels for smooth driving." << endl; }
+
+};
+class truck:virtual public vehicle
+{
+    public:
+    float loadcapacity;
+    int power;
+    string cargotype;
+     bool isLoaded=false;
+    void settruck(float c,int p,string ct)
+    {
+       
+       loadcapacity=c;
+       power=p;
+       cargotype=ct;
+      
+    }truck(string n,int w,int s,float ms,float wt,string t)
+ : vehicle(n,w,s,ms,wt,t) {}
+     
+    void show() override
+{
+    cout << "Truck Details " << endl;
+    cout << "Name: " << name << endl;
+    cout << "Wheels: " << wheels << endl;
+    cout << "Seats: " << seats << endl;
+    cout << "Max Speed: " << maxSpeed << " km/h" << endl;
+    cout << "Weight: " << weight << " tons" << endl;
+    cout << "Fuel Type: " << fuelType << endl;
+    cout << "Load Capacity: " << loadcapacity << " tons" << endl;
+    cout << "Power: " << power << " kW" << endl;
+    cout << "Cargo Type: " << cargotype << endl;
+    cout << (isLoaded ? "Status: Busy, currently loaded\n" : "Status: On a break\n");
+}
+    void move() override
+{
+    cout << name << " is moving with " << loadcapacity << " tons load." << endl;
+}
+
+void fuelInfo() override
+{
+    cout << name << " runs on " << fuelType << " fuel." << endl;
+}
+
+void wheelInfo() override
+{
+    cout << name << " has " << wheels << " wheels for carrying heavy loads." << endl;
+}
+
+   
+};
+class BMW: public car
+{   
+public:
+   string series;
+    bool isElectric;
+     string mode;
+    bool launchControl;
+BMW(string n,int w,int s,float ms,float wt,string t)
+: vehicle(n,w,s,ms,wt,t), car(n,w,s,ms,wt,t) {}
+    
+   void setBMW(string s,bool e,string m,bool l)
+ {
+    series =s;
+    isElectric=e;
+    mode=m;
+    launchControl=l;
+ }
+    void show() override
+    {
+        cout << "BMW: " << name << endl;
+        cout << "Series: " << series << ", Electric: " << (isElectric ? "Yes" : "No") << ", Mode: " << mode << endl;
+        cout << "Max Speed: " << maxSpeed << " km/h, Acceleration: " << acceleration << " m/s²" << endl;
+        cout << "Seats: " << seats << ", Color: " << color << ", Weight: " << weight << " tons" << endl;
+    }
+
+    void move() override
+    {
+        cout << name << " is moving " << (isElectric ? "silently (electric)" : "on fuel") << " in " << mode << " mode." << endl;
+        if(launchControl) cout << "Launch control engaged! 🚀" << endl;
+    }
+
+    void fuelInfo() override { cout << name << " uses " << fuelType << " fuel." << endl; }
+    void wheelInfo() override { cout << name << " has " << wheels << " wheels." << endl; }
+    void pace(int s)
+    {
+       cout<<"She scales as high as "<<s<<"!!"<<endl;
+    }
+    void pace(float d,float t)
+    {
+        float rs= d/t;
+      cout<<"You said she ran "<<d<<" km in "<< t<< "hours...told ya she is  quick.like this time she ran at "<<rs<<" kmph"<<endl;
+    }
+    
+};
+class Ferrari:public car
+{
+    public:
+    string Ferrarimodel;        // F8, SF90, 488
+   string series;       // GTB, Spider
+  float topSpeed;
+  bool hasF1Gearbox; 
+  
+  Ferrari(string n,int w,int s,float ms,float wt,string t)
+: vehicle(n,w,s,ms,wt,t), car(n,w,s,ms,wt,t) {}
+
+void setFerrari(string m,string s,float ts,bool g)
+{
+    Ferrarimodel=m;
+    series=s;
+    topSpeed=ts;
+    hasF1Gearbox=g;
+}
+    void show() override
+    {
+        cout << "Ferrari: " << name << endl;
+        cout << "Model: " << Ferrarimodel << ", Series: " << series << ", Top Speed: " << topSpeed << " km/h" << endl;
+        cout << "F1 Gearbox: " << (hasF1Gearbox ? "Yes" : "No") << endl;
+        cout << "Seats: " << seats << ", Weight: " << weight << " tons, Fuel: " << fuelType << endl;
+    }
+
+    void move() override
+    {
+        cout << name << " is racing at top speed: " << topSpeed << " km/h 🏎️💨" << endl;
+        if(hasF1Gearbox) cout << "Race mode activated! ⚡" << endl;
+    }
+
+    void fuelInfo() override { cout << name << " runs on " << fuelType << " fuel." << endl; }
+    void wheelInfo() override { cout << name << " has " << wheels << " wheels." << endl; }
+};
+class Lamborghini:virtual public car
+{
+    public:
+    string lambomodel;        // Aventador, Huracan
+    string edition; 
+    bool isAWD;     // SVJ, Performante
+    string driveMode;
+    bool scissorDoors;
+    Lamborghini(string n,int w,int s,float ms,float wt,string t)
+    : vehicle(n,w,s,ms,wt,t), car(n,w,s,ms,wt,t) {}
+
+    void setLambo(string m,string e,bool a,string d,bool s)
+    {
+        lambomodel=m;
+        edition=e;
+        isAWD=a;
+        driveMode=d;
+        scissorDoors=s;
+    }
+   void show() override
+    {
+        cout << "Lamborghini: " << name << endl;
+        cout << "Model: " << lambomodel << ", Edition: " << edition << ", AWD: " << (isAWD ? "Yes" : "No") << endl;
+        cout << "Drive Mode: " << driveMode << ", Scissor Doors: " << (scissorDoors ? "Yes" : "No") << endl;
+        cout << "Max Speed: " << maxSpeed << " km/h, Seats: " << seats << ", Weight: " << weight << " tons" << endl;
+    }
+
+    void move() override
+    {
+        cout << name << " roars in " << driveMode << " mode 💨🔥" << endl;
+        cout << name << " is going VROOOOMMMMM!" << endl;
+    }
+
+    void fuelInfo() override { cout << name << " runs on " << fuelType << " fuel." << endl; }
+    void wheelInfo() override { cout << name << " has " << wheels << " wheels." << endl; }
+};
+
+void getInput(string &name, int &wheels, int &seats, float &maxspeed, float &weight, string &fuelType)
+{
+    cout << "Name:" << endl;
+    getline(cin, name);
+
+    cout << "Wheels:" << endl;
+    cin >> wheels;
+
+    cout << "Seats:" << endl;
+    cin >> seats;
+
+    cout << "Maxspeed:" << endl;
+    cin >> maxspeed;
+
+    cout << "Weight:" << endl;
+    cin >> weight;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer before next getline
+
+    cout << "Fuel Type:" << endl;
+    getline(cin, fuelType);
+}
+
+int main()
+{
+    vector <vehicle*> garage;
+    int n;
+    cout << "Number of vehicles:" << endl;
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+
+    for(int i = 0; i < n; i++)
+    {
+        string choice;
+        cout << "Choice (airplane / jet / car /truck /BMW /Ferrari /Lamborghini):" << endl;
+        getline(cin, choice);
+
+        string name;
+        int wheels;
+        int seats;
+        float maxspeed;
+        float weight;
+        string fuelType;
+
+        getInput(name, wheels, seats, maxspeed, weight, fuelType);
+
+        if(choice == "airplane")
+        {
+            float peakHeight;
+            int aviation;
+            cout << "Enter peak height:" << endl; 
+            cin >> peakHeight;
+            cout << "Enter aviation capacity:" << endl; 
+            cin >> aviation;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+
+            airplane *A = new airplane(name, wheels, seats, maxspeed, weight, fuelType);
+            A->airplaneset(aviation, peakHeight);
+            garage.push_back(A);
+        }
+        else if(choice == "jet")
+        {
+            int range;
+            bool isSupersonic;
+            string weapon;
+            bool stealthMode;
+
+            cout << "Enter range:" << endl; 
+            cin >> range;
+            cout << "Is it supersonic? (1/0):" << endl; 
+            cin >> isSupersonic;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+
+            cout << "Enter weapon:" << endl; 
+            getline(cin, weapon);
+
+            cout << "Does it support stealth mode? (1/0):" << endl; 
+            cin >> stealthMode;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+
+            jet *B = new jet(name, wheels, seats, maxspeed, weight, fuelType);
+            B->jetset(range, isSupersonic, weapon, stealthMode);
+            garage.push_back(B);
+        }
+        else if(choice == "car")
+        {
+            string model;
+            float speed;
+            string color;
+
+            cout << "Enter model:" << endl; 
+            getline(cin, model);
+
+            cout << "Enter speed:" << endl; 
+            cin >> speed;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+
+            cout << "Enter color:" << endl; 
+            getline(cin, color);
+
+            car *C = new car(name, wheels, seats, maxspeed, weight, fuelType);
+            C->setcar(model, speed, color);
+            garage.push_back(C);
+        }
+
+        else if(choice=="truck")
+        {
+            float loadcapacity;
+            int power;
+            string cargotype;
+
+            cout<<"Enter load capacity:"<<endl;
+            cin>>loadcapacity;
+
+            cout<<"Enter power:"<<endl;
+            cin>>power;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout<<"Enter cargotype:"<<endl;
+            getline(cin,cargotype);
+
+            truck *D = new truck(name, wheels, seats, maxspeed, weight, fuelType);
+            D->settruck(loadcapacity,power,cargotype);
+            garage.push_back(D);
+        }
+
+        else if(choice=="BMW")
+        {
+            string series;
+            bool isElectric;
+            string mode;
+            bool launchControl;
+            int acceleration;
+
+            cout<<"Enter series:"<<endl;
+            getline(cin,series);
+
+            cout<<"Is it electric (0/1)??"<<endl;
+            cin>>isElectric;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout<<"Enter mode"<<endl;
+            getline(cin,mode);
+
+            cout<<"Does it have launch control (0/1) ??"<<endl;
+            cin>>launchControl;
+
+            cout<<"Enter acceleration:";
+            cin>>acceleration;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            BMW *E = new BMW(name, wheels, seats, maxspeed, weight, fuelType);
+            E->setBMW(series,isElectric,mode,launchControl);
+            E->pace(acceleration);
+            garage.push_back(E);
+        }
+
+        else if(choice=="Ferrari")
+        {
+            string Ferrarimodel;        // F8, SF90, 488
+            string series;       // GTB, Spider
+            float topSpeed;
+            bool hasF1Gearbox;
+
+            cout<<"Enter model:"<<endl;
+            getline(cin,Ferrarimodel);
+
+            cout<<"Enter series:"<<endl;
+            getline(cin,series);
+
+            cout<<"Top speed:"<<endl;
+            cin>>topSpeed;
+
+            cout<<"Does it have F1 Gear box (0/1)?"<<endl;
+            cin>>hasF1Gearbox;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            Ferrari *F = new Ferrari(name, wheels, seats, maxspeed, weight, fuelType);
+            F->setFerrari(Ferrarimodel,series,topSpeed,hasF1Gearbox);
+            garage.push_back(F);
+        }
+
+        else if(choice== "Lamborghini")
+        {
+            string lambomodel;        // Aventador, Huracan
+            string edition; 
+            bool isAWD;     // SVJ, Performante
+            string driveMode;
+            bool scissorDoors;
+
+            cout<<"Enter model:"<<endl;
+            getline(cin,lambomodel);
+
+            cout<<"Enter edition:"<<endl;
+            getline(cin,edition);
+
+            cout<<"Is it AWD (0/1)?"<<endl;
+            cin>>isAWD;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout<<"Enter Drive mode:"<<endl;
+            getline(cin,driveMode);
+
+            cout<<"Does it have scissor door (0/1)?"<<endl;
+            cin>>scissorDoors;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            Lamborghini *G = new Lamborghini(name, wheels, seats, maxspeed, weight, fuelType);
+            G->setLambo(lambomodel,edition,isAWD,driveMode,scissorDoors);
+            garage.push_back(G);
+        }
+
+        cout << "Showing vehicles so far:" << endl;
+        for(auto val : garage)
+        {
+            val->show();
+            val->move();
+            val->fuelInfo();
+            val->wheelInfo();
+        }
+        cout << "---------------------------" << endl;
+    }
+
+    for(auto v : garage) delete v;
+    garage.clear();
+    return 0;
+}    
+
